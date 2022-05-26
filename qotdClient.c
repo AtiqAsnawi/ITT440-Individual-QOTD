@@ -3,9 +3,32 @@
 #include<sys/socket.h>
 #include<string.h>
 #include<arpa/inet.h>
+#include<unistd.h>
+#include<stdlib.h>
+
+#define PORT 17
+#define MAX 8000
+#define STAD struct sockaddr
+
+//function for enable client to chat server
+void func(int socket_desc)
+{
+	char buff[MAX];
+	int a;
+	bzero(buff,sizeof(buff));
+	printf("Text server : ");
+	a = 0;
+	if((buff[a++]= getchar())!= '\a')
+	{
+		write(socket_desc,buff,sizeof(buff));
+		bzero(buff,sizeof(buff));
+		read(socket_desc,buff,sizeof(buff));
+		printf(" Server : %s" ,buff);
+	}
+}
 
 int main(int argc,char *argv[])
-{	
+{
 	int socket_desc;
 	struct sockaddr_in server;
 
@@ -13,22 +36,31 @@ int main(int argc,char *argv[])
 	socket_desc=socket(AF_INET,SOCK_STREAM,0);
 	if(socket_desc == -1)
 	{
-		printf(" Socket cannot be created");
+		printf("\n Socket cannot be created\n");
 	}
 	else
-		printf("  Successful,Socket created");
+		printf(" \n Successful ,socket created..\n");
+
 	//assign server ip address and port
-	server.sin_addr.s_addr=inet_addr("192.168.56.103"); //Server ip address
+	server.sin_addr.s_addr=inet_addr("192.168.56.102"); //Server ip address
 	server.sin_family=AF_INET;
-	server.sin_port=htons(22);
+	server.sin_port=htons(PORT);
 
 	//connect client socket with server socket
 	if(connect(socket_desc, (struct sockaddr*)&server,sizeof(server))<0)
 	{
-		puts("connection to server failed");
+		puts("\nConnection to server failed\n");
 		return 1;
 	}
 	else
 	puts("connection to server successsful");
 	return 0;
-}	
+
+	//function as for chat
+	func(socket_desc);
+
+	//close socket
+	close(socket_desc);
+}
+
+
