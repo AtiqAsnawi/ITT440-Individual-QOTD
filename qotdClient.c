@@ -1,4 +1,4 @@
-//QOTD Client code
+ //QOTD Client code
 #include<stdio.h>
 #include<sys/socket.h>
 #include<string.h>
@@ -6,7 +6,7 @@
 #include<unistd.h>
 #include<stdlib.h>
 
-#define PORT 17
+#define PORT 1769
 #define MAX 8000
 #define STAD struct sockaddr
 
@@ -16,7 +16,7 @@ void func(int socket_desc)
 	char buff[MAX];
 	int a;
 	bzero(buff,sizeof(buff));
-	printf("Text server : ");
+	printf("Type 'i want'  to server to get Quote Of The Day : ");
 	a = 0;
 	if((buff[a++]= getchar())!= '\a')
 	{
@@ -46,7 +46,7 @@ int main(int argc,char *argv[])
 	server.sin_family=AF_INET;
 	server.sin_port=htons(PORT);
 
-	//connect client socket with server socket
+	//connect client socket with the server socket
 	if(connect(socket_desc, (struct sockaddr*)&server,sizeof(server))<0)
 	{
 		puts("\nConnection to server failed\n");
@@ -54,13 +54,15 @@ int main(int argc,char *argv[])
 	}
 	else
 	puts("connection to server successsful");
-	return 0;
 
 	//function as for chat
 	func(socket_desc);
 
-	//close socket
+	//close the socket
 	close(socket_desc);
+	
+	//end the program
+	return 0;
 }
 
 
